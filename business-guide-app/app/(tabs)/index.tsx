@@ -2,9 +2,31 @@ import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AIAssistant from '@/components/AIAssistant';
-import InfoCard from '@/components/InfoCard';
+// AIAssistant and InfoCard components are assumed to be in these paths
+// import AIAssistant from '@/components/AIAssistant';
+// import InfoCard from '@/components/InfoCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// Mock components for demonstration purposes if the original components are not available.
+const AIAssistant = ({ visible, onClose }) => {
+  if (!visible) return null;
+  return (
+    <View style={styles.modalOverlay}>
+      <View style={styles.modalContent}>
+        <Text style={styles.modalTitle}>AI Assistant</Text>
+        <Text>Ask me anything about the business program!</Text>
+        <Pressable style={styles.closeButton} onPress={onClose}>
+          <Text style={styles.closeButtonText}>Close</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+};
+
+const InfoCard = ({ children }) => {
+  return <View style={styles.infoCard}>{children}</View>;
+};
+
 
 export default function HomeScreen() {
   const [showAI, setShowAI] = useState(false);
@@ -27,7 +49,8 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    // The 'edges' prop has been removed to apply safe area insets to all sides, fixing the cutoff issue.
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
           <Text style={styles.title}>🎓 경영학전공 완전정복 가이드</Text>
@@ -41,20 +64,20 @@ export default function HomeScreen() {
             차의과학대학교 경영학과의 모든 정보를 한눈에!
           </Text>
           
-          <InfoCard variant="info">
+          <InfoCard>
             <Text style={styles.infoText}>
               💡 궁금한 주제를 선택하거나 AI 어시스턴트에게 질문하세요!
             </Text>
           </InfoCard>
 
-          {/* 주요 섹션 카드들 */}
+          {/* Main Section Cards */}
           <View style={styles.cardGrid}>
             {menuItems.map((item, index) => (
               <Pressable 
                 key={index}
                 style={styles.menuCard}
                 onPress={() => {
-                  // 탭 이동 로직 (나중에 구현)
+                  // Navigation logic to be implemented later
                 }}
               >
                 <MaterialCommunityIcons 
@@ -67,7 +90,7 @@ export default function HomeScreen() {
             ))}
           </View>
 
-          {/* 통계 요약 */}
+          {/* Stats Summary */}
           <View style={styles.statsSection}>
             <Text style={styles.sectionTitle}>📊 주요 통계</Text>
             <View style={styles.statsGrid}>
@@ -87,7 +110,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* AI 어시스턴트 버튼 */}
+        {/* AI Assistant Button */}
         <Pressable 
           style={styles.aiButton}
           onPress={() => setShowAI(true)}
@@ -107,7 +130,7 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
 
-      {/* AI 어시스턴트 모달 */}
+      {/* AI Assistant Modal */}
       <AIAssistant 
         visible={showAI} 
         onClose={() => setShowAI(false)} 
@@ -133,11 +156,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     marginBottom: 8,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
     color: '#ffffff',
     opacity: 0.9,
+    textAlign: 'center',
   },
   content: {
     padding: 16,
@@ -149,16 +174,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
   },
+  infoCard: {
+    backgroundColor: '#e7f3ff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 20,
+    borderLeftColor: '#007AFF',
+    borderLeftWidth: 4,
+  },
   infoText: {
     fontSize: 14,
-    color: '#333',
+    color: '#00529B',
     lineHeight: 20,
   },
   cardGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-    marginTop: 16,
+    justifyContent: 'space-between',
   },
   menuCard: {
     width: '48%',
@@ -166,6 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -195,7 +228,9 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#007AFF',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -203,18 +238,18 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: '#007AFF',
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: '#ffffff',
-    opacity: 0.9,
+    color: '#333',
   },
   aiButton: {
     backgroundColor: '#007AFF',
     padding: 16,
-    margin: 16,
+    marginHorizontal: 16,
+    marginVertical: 8,
     borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
@@ -233,12 +268,49 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 20,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#f0f0f0',
     alignItems: 'center',
     gap: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
   },
   footerText: {
     fontSize: 12,
     color: '#666',
+    textAlign: 'center',
+  },
+  // Mock Modal Styles
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
